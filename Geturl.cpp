@@ -47,7 +47,7 @@ int main()
             #undef fs
             #undef fnex
         }
-        if(pos[0].size()!=pos[1].size()) cout<<pos[1].size(),puts("ERROR");
+        if(pos[0].size()!=pos[1].size()) puts("ERROR");
         else for(int i=0;i<pos[0].size();i++){
             printf("%s",p[0]+1);
             for(int j=pos[0][i]+1;j<=pos[1][i];j++) putchar(s[j]);
