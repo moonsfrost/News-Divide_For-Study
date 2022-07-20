@@ -1,1 +1,1 @@
-g++ Geturl.cpp -std=c++14 -Wall -o Geturl
+g++ .\Data_processing\Geturl.cpp -std=c++14 -Wall -o .\Data_processing\Geturl
