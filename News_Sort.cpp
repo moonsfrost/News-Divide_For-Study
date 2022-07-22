@@ -9,25 +9,28 @@
 #include<direct.h>
 #include<windows.h>
 #include<io.h>
+#include<fstream>
 #include<cstdlib>
 using namespace std;
 const string m=".\\Model";
 map<string,int> num;
 map<string,map<string,int>> book;
+ifstream FI;
+ofstream FO;
 void Print_Sort(){
     string file=m+"\\sort";
-    freopen(file.c_str(),"w",stdout);
+    FO.open(file,ios::out);
     for(map<string,int>::iterator iter=num.begin();iter!=num.end();iter++){
-        cout<<iter->first<<" "<<iter->second<<endl;
+        FO<<iter->first<<" "<<iter->second<<endl;
     }
-    fclose(stdout);
+    FO.close();
 }
 void Print_Single(string file,string $){
-    freopen(file.c_str(),"w",stdout);
+    FO.open(file,ios::out);
     for(map<string,int>::iterator iter=book[$].begin();iter!=book[$].end();iter++){
-        cout<<iter->first<<" "<<iter->second<<endl;
+        FO<<iter->first<<" "<<iter->second<<endl;
     }
-    fclose(stdout);
+    FO.close();
 }
 void Get_Output_Folder(string folder){
 	if (_access(folder.c_str(),0)==-1) _mkdir(folder.c_str());	
@@ -44,29 +47,30 @@ struct Word{
     }
 };
 inline void File_Create(string file){
-    freopen(file.c_str(),"w",stdout);
-    fclose(stdout);
+    FO.open(file,ios::out);
+    FO.close();
 }
 void Previous_Read(string $){
     string file=m+"\\"+$+".dat";
     if(!Exists_Test(file)) File_Create(file);
-    freopen(file.c_str(),"r",stdin);
+    FI.open(file,ios::in);
     string w;
     int tt;
-    while(cin>>w>>tt) book[$][w]=tt;
-    fclose(stdin);
+    while(FI>>w>>tt) book[$][w]=tt;
+    FI.close();
 }
 string rd[100000];int siz;
 void File_To_rd(string file){
     string Command="python -u Divide.py "+file+" temp";
     system(Command.c_str());
-    freopen("temp","r",stdin);
+    FI.open("temp",ios::in);
     siz=1;
-    while(cin>>rd[siz]) siz++;
+    while(FI>>rd[siz]) siz++;
     siz--;
+    FI.close();
     sort(rd+1,rd+1+siz);
     siz=unique(rd+1,rd+1+siz)-rd-1;
-    fclose(stdin);
+    remove(".\\temp");
 }
 void Update_Single_File(string file,string $){
     File_To_rd(file);
@@ -75,21 +79,13 @@ void Update_Single_File(string file,string $){
 }
 void getFileNames(string path, vector<string>& files)
 {
-	intptr_t hFile = 0;
-	struct _finddata_t fileinfo;
-	string p;
-	if ((hFile=_findfirst(p.assign(path).append("\\*").c_str(),&fileinfo)) != -1){
-		do{
-			if ((fileinfo.attrib & _A_SUBDIR)){
-				if (strcmp(fileinfo.name,".")!=0&&strcmp(fileinfo.name,"..")!= 0)
-					getFileNames(p.assign(path).append("\\").append(fileinfo.name), files);
-			}
-			else{
-				files.push_back(p.assign(path).append("\\").append(fileinfo.name));
-			}
-		}while(_findnext(hFile,&fileinfo)==0);
-		_findclose(hFile);
-	}
+    string command="python -u GetFileName.py "+path;
+	system(command.c_str());
+    string r;
+    FI.open("temp",ios::in);
+    while(FI>>r) files.push_back(path+"\\"+r);
+    FI.close();
+    remove(".\\temp");
 }
 void Update_Model(){
     puts("Enter the folder name.");
@@ -109,16 +105,16 @@ void Begin(){
     Get_Output_Folder(m);
     string file=m+"\\sort";
     if(!Exists_Test(file)) File_Create(file);
-    freopen(file.c_str(),"r",stdin);
+    FI.open(file,ios::in);
     string q;int e;
-    while(cin>>q>>e) num[q]=e;
-    fclose(stdin);
+    while(FI>>q>>e) num[q]=e;
+    FI.close();
 }
 int main()
 {
     Begin();
-    char ch;
     puts("Enter 'U' to update model or 'L' to load model");
+    char ch;
     cin>>ch;
     if(ch=='U') Update_Model();
     return 0;
