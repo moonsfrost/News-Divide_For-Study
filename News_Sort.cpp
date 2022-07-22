@@ -50,7 +50,7 @@ inline void File_Create(string file){
     FO.open(file,ios::out);
     FO.close();
 }
-void Previous_Read(string $){
+void Previous_Read(string $){//Model data to book[$]
     string file=m+"\\"+$+".dat";
     if(!Exists_Test(file)) File_Create(file);
     FI.open(file,ios::in);
@@ -60,7 +60,7 @@ void Previous_Read(string $){
     FI.close();
 }
 string rd[100000];int siz;
-void File_To_rd(string file){
+void File_To_rd(string file){//Data file to rd string
     string Command="python -u Divide.py "+file+" temp";
     system(Command.c_str());
     FI.open("temp",ios::in);
@@ -109,6 +109,34 @@ void Begin(){
     string q;int e;
     while(FI>>q>>e) num[q]=e;
     FI.close();
+}
+void Check_Single(string file){
+    File_To_rd(file);
+    map<string,long double> p;
+    for(map<string,int>::iterator iter=num.begin();iter!=num.end();iter++) p[iter->first]=1.0/num.size();
+    for(int i=1;i<=siz;i++){
+        double B=0.0;
+        for(map<string,int>::iterator iter=num.begin();iter!=num.end();iter++){
+            B+=(p[iter->first]*=(long double)book[iter->first][rd[i]]/iter->second);
+        }
+        for(map<string,int>::iterator iter=num.begin();iter!=num.end();iter++){
+            p[iter->first]/=B;
+        }
+    }
+    map<string,int>::iterator ans=num.begin();
+    for(map<string,int>::iterator iter=num.begin();iter!=num.end();iter++){
+        if(p[iter->first]>p[ans->first]) ans=iter;
+    }
+    cout<<ans->first<<" "<<ans->second<<endl;
+}
+void Load_Model(){
+    for(map<string,int>::iterator iter=num.begin();iter!=num.end();iter++){
+        Previous_Read(iter->first);
+    }
+    puts("Enter the file name.");
+    string A;
+    cin>>A;
+    Check_Single(A);
 }
 int main()
 {
