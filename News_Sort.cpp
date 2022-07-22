@@ -117,7 +117,7 @@ void Check_Single(string file){
     for(int i=1;i<=siz;i++){
         double B=0.0;
         for(map<string,int>::iterator iter=num.begin();iter!=num.end();iter++){
-            B+=(p[iter->first]*=(long double)book[iter->first][rd[i]]/iter->second);
+            B+=(p[iter->first]*=(long double)(book[iter->first][rd[i]]+1)/(iter->second+2));
         }
         for(map<string,int>::iterator iter=num.begin();iter!=num.end();iter++){
             p[iter->first]/=B;
