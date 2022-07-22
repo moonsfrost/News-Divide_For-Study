@@ -145,5 +145,6 @@ int main()
     char ch;
     cin>>ch;
     if(ch=='U') Update_Model();
+    if(ch=='L') Load_Model();
     return 0;
 }
