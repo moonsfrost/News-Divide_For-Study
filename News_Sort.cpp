@@ -127,7 +127,7 @@ void Check_Single(string file){
     for(map<string,int>::iterator iter=num.begin();iter!=num.end();iter++){
         if(p[iter->first]>p[ans->first]) ans=iter;
     }
-    cout<<ans->first<<" "<<ans->second<<endl;
+    cout<<ans->first<<" "<<p[ans->first]<<endl;
 }
 void Load_Model(){
     for(map<string,int>::iterator iter=num.begin();iter!=num.end();iter++){
