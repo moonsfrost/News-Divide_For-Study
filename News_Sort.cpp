@@ -133,10 +133,28 @@ void Load_Model(){
     for(map<string,int>::iterator iter=num.begin();iter!=num.end();iter++){
         Previous_Read(iter->first);
     }
-    puts("Enter the file name.");
-    string A;
-    cin>>A;
-    Check_Single(A);
+    puts("Enter 'S' to check one file or 'M' to check the whole folder.");
+    char ch;
+    cin>>ch;
+    if(ch=='S'){
+        puts("Enter the file name.");
+        string A;
+        cin>>A;
+        Check_Single(A);
+    }
+    if(ch=='M'){
+        puts("Enter the folder name");
+        string f;
+        cin>>f;
+        vector<string> v;
+        getFileNames(f,v);
+        puts("Enter the result file name.");
+        string res;
+        cin>>res;
+        freopen(res.c_str(),"w",stdout);
+        for(const auto &ph:v) Check_Single(ph);
+        fclose(stdout);
+    }   
 }
 int main()
 {
