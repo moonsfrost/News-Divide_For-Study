@@ -110,7 +110,7 @@ void Begin(){
     while(FI>>q>>e) num[q]=e;
     FI.close();
 }
-void Check_Single(string file){
+void Check_Single(string file,bool flag){//true no i/o
     File_To_rd(file);
     map<string,long double> p;
     for(map<string,int>::iterator iter=num.begin();iter!=num.end();iter++) p[iter->first]=1.0/num.size();
@@ -127,7 +127,8 @@ void Check_Single(string file){
     for(map<string,int>::iterator iter=num.begin();iter!=num.end();iter++){
         if(p[iter->first]>p[ans->first]) ans=iter;
     }
-    cout<<ans->first<<" "<<p[ans->first]<<endl;
+    if(flag) cout<<ans->first<<" "<<p[ans->first]<<endl;
+    else FO<<ans->first<<endl;
 }
 void Load_Model(){
     for(map<string,int>::iterator iter=num.begin();iter!=num.end();iter++){
@@ -140,7 +141,7 @@ void Load_Model(){
         puts("Enter the file name.");
         string A;
         cin>>A;
-        Check_Single(A);
+        Check_Single(A,1);
     }
     if(ch=='M'){
         puts("Enter the folder name");
@@ -151,9 +152,9 @@ void Load_Model(){
         puts("Enter the result file name.");
         string res;
         cin>>res;
-        freopen(res.c_str(),"w",stdout);
-        for(const auto &ph:v) Check_Single(ph);
-        fclose(stdout);
+        FO.open(res,ios::out);
+        for(const auto &ph:v) Check_Single(ph,0);
+        FO.close();
     }   
 }
 int main()
